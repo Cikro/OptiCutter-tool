@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
@@ -75,48 +75,73 @@ namespace OptiCutter_Tool
 
         public async Task<string> Run()
         {
-            var deskScenarios = new Dictionary<string, OptiCutterLinearCutCalculatorRequest>
-            {
-                { "20-inches-wide", new OptiCutterLinearCutCalculatorRequest
+            var requirementsBoards = new Dictionary<requiremnts, List<OptiCutterLinearCutCalculatorBoard>> {
+                { requiremnts.InchesWide20, new List<OptiCutterLinearCutCalculatorBoard>
                     {
-                        Kerf = 0,
-                        Stock = new List<OptiCutterLinearCutCalculatorBoard>
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 4, Length = 62,  },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 21.5 },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 21.5 },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 17 }
+                    }
+                },
+                { requiremnts.InchesWide25, new List<OptiCutterLinearCutCalculatorBoard>
+                    {
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 5, Length = 62,  },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 26.5 },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 21.5 },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 22 }
+                    }
+                },
+                { requiremnts.InchesWide30, new List<OptiCutterLinearCutCalculatorBoard>
+                    {
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 6, Length = 62,  },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 31.5 },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 21.5 },
+                        new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 27 }
+                    }
+                },
+            };
+            var stockBoards = new Dictionary<stock, List<OptiCutterLinearCutCalculatorBoard>>
+            {
+                { stock.All, new List<OptiCutterLinearCutCalculatorBoard>
                         {
                             new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 96 },
                             new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 120 },
                             new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 144, },
                             new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 192 }
-                        },
-                        Requirements = new List<OptiCutterLinearCutCalculatorBoard>
-                        {
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 4, Length = 62,  },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 21.5 },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 23 },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 17 }
                         }
-                    }
                 },
-
-                { "25-inches-wide", new OptiCutterLinearCutCalculatorRequest
-                    {
-                        Kerf = 0,
-                        Stock = new List<OptiCutterLinearCutCalculatorBoard>
+                { stock.No192, new List<OptiCutterLinearCutCalculatorBoard>
                         {
                             new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 96 },
                             new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 120 },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 144, },
-                        },
-                        Requirements = new List<OptiCutterLinearCutCalculatorBoard>
-                        {
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 5, Length = 62,  },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 26.5 },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 23 },
-                            new OptiCutterLinearCutCalculatorBoard { Quantity = 2, Length = 22 }
+                            new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 144, }
                         }
-                    }
-                }
+                },
+                { stock.only96, new List<OptiCutterLinearCutCalculatorBoard>
+                        {
+                            new OptiCutterLinearCutCalculatorBoard { Quantity= 50, Length = 96 },
+                        }
+                },
+            };
 
 
+
+            var kerf = 0.625;
+
+            var deskScenarios = new Dictionary<string, OptiCutterLinearCutCalculatorRequest>
+                {
+                    { "20-inches-wide-all", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide20], Stock = stockBoards[stock.All], Kerf = kerf   } },
+                    { "20-inches-wide-no-192", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide20], Stock = stockBoards[stock.No192], Kerf = kerf   } },
+                    { "20-inches-wide-only-96", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide20], Stock = stockBoards[stock.only96], Kerf = kerf   } },
+
+                    { "25-inches-wide-all", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide25], Stock = stockBoards[stock.All], Kerf = kerf   } },
+                    { "25-inches-wide-no-192", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide25], Stock = stockBoards[stock.No192], Kerf = kerf   } },
+                    { "25-inches-wide-only-96", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide25], Stock = stockBoards[stock.only96], Kerf = kerf   } },
+
+                    { "30-inches-wide-all", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide30], Stock = stockBoards[stock.All], Kerf = kerf   } },
+                    { "30-inches-wide-no-192", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide30], Stock = stockBoards[stock.No192], Kerf = kerf   } },
+                    { "30-inches-wide-only-96", new OptiCutterLinearCutCalculatorRequest{ Requirements = requirementsBoards[requiremnts.InchesWide30], Stock = stockBoards[stock.only96], Kerf = kerf   } }
             };
 
             foreach((var scenarioName, var request) in deskScenarios)
@@ -135,4 +160,21 @@ namespace OptiCutter_Tool
             return "I am finshed!";
         }
     }
+
+    public enum requiremnts
+    {
+        InchesWide20 = 0,
+        InchesWide25 = 1,
+        InchesWide30 = 3,
+
+    };
+
+    public enum stock
+    {
+        All = 0,
+        No192 = 1,
+        only96 = 2
+
+    };
+
 }
