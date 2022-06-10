@@ -24,5 +24,5 @@ Reasons for running their tool a bunch:
 2. I don't know what length of boards I can actually transport or if I will be able borrow a truck from someone when I need to buy.
 3. I haven't completly decided on the what width I want my desk to be yet.
 4. The design of my desk may change slightly. 
-5. I may have forgotten to include kerf the first time through...
+5. I may have forgotten to include kerf the first time too...
 
